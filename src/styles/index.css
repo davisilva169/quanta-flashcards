@@ -1,0 +1,355 @@
+@import 'katex/dist/katex.min.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================================
+   QUANTA — THEME TOKENS
+   ----------------------------------------------------------------------------
+   Two complete, hand-tuned themes. NOT one theme with the other inverted.
+
+     :root      → LIGHT  (the default — applies when <html> has no class)
+     html.dark  → DARK
+
+   Every value is a raw `R G B` triplet so Tailwind's `<alpha-value>` syntax
+   (bg-card/60, text-primary/80, ...) works. tailwind.config.js wraps these
+   in rgb() via the `withAlpha` helper.
+
+   Design intent:
+     - Light: cool light-grey floor, white surfaces, near-black blue-tinted
+       text, ONE vivid accent (indigo-violet) used sparingly. Elevation comes
+       from solid surfaces + real shadows + visible hairline borders.
+     - Dark: deep blue-grey floor, layered grey-blue surfaces, luminous text,
+       same accent but brighter. Elevation comes from surface contrast;
+       shadows are near-invisible.
+   ============================================================================ */
+
+:root {
+  /* ── Surfaces ─────────────────────────────────────────────────────────── */
+  --bg-app: 244 245 247;          /* #f4f5f7 — cool light-grey floor          */
+  --bg-surface: 255 255 255;      /* #ffffff — sidebar, top-level panels      */
+  --bg-surface-2: 248 249 251;    /* #f8f9fb — slightly recessed sections     */
+  --bg-card: 255 255 255;         /* #ffffff — cards on the floor             */
+  --bg-card-hover: 241 243 246;   /* #f1f3f6 — perceptible card hover         */
+  --bg-elevated: 255 255 255;     /* #ffffff — modals / popovers              */
+  --bg-input: 255 255 255;        /* #ffffff — form fields                    */
+
+  /* ── Text ─────────────────────────────────────────────────────────────── */
+  --text-primary: 18 22 33;       /* #121621 — near-black, blue-tinted        */
+  --text-secondary: 55 62 78;     /* #373e4e — secondary copy                 */
+  --text-muted: 99 107 124;       /* #636b7c — muted, AA on white             */
+  --text-faint: 139 147 163;      /* #8b93a3 — faint labels, still legible    */
+  --text-inverse: 255 255 255;    /* text on a dark solid (rare in light)     */
+  --text-on-accent: 255 255 255;  /* text on a solid accent fill              */
+
+  /* ── Borders ──────────────────────────────────────────────────────────── */
+  --border-subtle: 218 222 230;   /* #dadee6 — hairline visible on white      */
+  --border-divider: 200 205 215;  /* #c8cdd7 — standard divider               */
+  --border-strong: 165 171 184;   /* #a5abb8 — emphasized outline             */
+
+  /* ── Accent (indigo-violet) ───────────────────────────────────────────── */
+  --accent: 77 87 232;            /* #4d57e8 — brand accent                   */
+  --accent-fg: 61 69 204;         /* #3d45cc — accent text on light tints     */
+  --accent-soft: 237 238 254;     /* #edeefe — faint accent-tinted fill       */
+
+  /* ── Semantic status ──────────────────────────────────────────────────── */
+  --success: 22 145 92;           /* #16915c                                  */
+  --success-soft: 218 240 228;    /* #daf0e4                                  */
+  --success-fg: 13 95 60;         /* #0d5f3c — darkened for AA on soft fill   */
+  --warning: 168 110 12;          /* #a86e0c — saturated amber-brown          */
+  --warning-soft: 250 226 184;    /* #fae2b8 — slightly more saturated tint   */
+  --warning-fg: 66 42 4;          /* #422a04 — near-black amber, max AA       */
+  --danger: 198 50 55;            /* #c63237                                  */
+  --danger-soft: 250 225 226;     /* #fae1e2                                  */
+  --danger-fg: 148 32 37;         /* #942025 — darkened for legibility        */
+  --info: 37 99 178;              /* #2563b2                                  */
+  --info-soft: 222 234 250;       /* #deeafa                                  */
+  --info-fg: 26 70 132;           /* #1a4684 — darker info                    */
+
+  /* ── Tint base ────────────────────────────────────────────────────────── */
+  /* Base color for translucent overlay utilities (.tint-*). In light it is
+     a dark blue-black, so a low-opacity layer reads as a subtle recess. */
+  --tint-base: 18 22 33;
+
+  /* ── Shadows ──────────────────────────────────────────────────────────── */
+  /* In light, shadow IS elevation. Layered + soft, but present. */
+  --shadow-soft: 0 1px 2px rgb(18 22 33 / 0.06),
+                 0 1px 3px rgb(18 22 33 / 0.05);
+  --shadow-card: 0 1px 2px rgb(18 22 33 / 0.06),
+                 0 2px 6px rgb(18 22 33 / 0.06),
+                 0 8px 20px rgb(18 22 33 / 0.07);
+  --shadow-elevated: 0 4px 12px rgb(18 22 33 / 0.10),
+                     0 16px 48px rgb(18 22 33 / 0.16);
+  --shadow-glow: 0 0 0 1px rgb(77 87 232 / 0.22),
+                 0 6px 24px rgb(77 87 232 / 0.20);
+
+  color-scheme: light;
+}
+
+html.dark {
+  /* ── Surfaces ─────────────────────────────────────────────────────────── */
+  --bg-app: 9 10 13;              /* #090a0d — deep blue-grey floor           */
+  --bg-surface: 15 17 21;         /* #0f1115 — sidebar, panels                */
+  --bg-surface-2: 19 21 27;       /* #13151b — recessed sections              */
+  --bg-card: 22 25 31;            /* #16191f — cards                          */
+  --bg-card-hover: 30 34 42;      /* #1e222a — card hover                     */
+  --bg-elevated: 26 29 36;        /* #1a1d24 — modals / popovers              */
+  --bg-input: 17 19 24;           /* #111318 — form fields                    */
+
+  /* ── Text ─────────────────────────────────────────────────────────────── */
+  --text-primary: 226 228 234;    /* #e2e4ea — luminous, not pure white       */
+  --text-secondary: 180 185 197;  /* #b4b9c5                                  */
+  --text-muted: 134 140 154;      /* #868c9a                                  */
+  --text-faint: 92 98 112;        /* #5c6270                                  */
+  --text-inverse: 18 22 33;       /* text on a light solid (rare in dark)     */
+  --text-on-accent: 255 255 255;  /* text on a solid accent fill              */
+
+  /* ── Borders ──────────────────────────────────────────────────────────── */
+  --border-subtle: 33 37 45;      /* #21252d — hairline on dark surface       */
+  --border-divider: 44 49 59;     /* #2c313b — standard divider               */
+  --border-strong: 64 70 83;      /* #404653 — emphasized outline             */
+
+  /* ── Accent (indigo-violet) ───────────────────────────────────────────── */
+  --accent: 109 119 248;          /* #6d77f8 — brighter on dark               */
+  --accent-fg: 157 163 251;       /* #9da3fb — accent text on dark tints      */
+  --accent-soft: 31 33 64;        /* #1f2140 — faint accent-tinted fill       */
+
+  /* ── Semantic status ──────────────────────────────────────────────────── */
+  --success: 52 199 132;          /* #34c784                                  */
+  --success-soft: 20 38 31;       /* #14261f                                  */
+  --success-fg: 110 222 168;      /* #6edea8                                  */
+  --warning: 233 178 76;          /* #e9b24c                                  */
+  --warning-soft: 43 35 18;       /* #2b2312                                  */
+  --warning-fg: 240 199 122;      /* #f0c77a                                  */
+  --danger: 240 110 114;          /* #f06e72                                  */
+  --danger-soft: 43 23 25;        /* #2b1719                                  */
+  --danger-fg: 245 150 153;       /* #f59699                                  */
+  --info: 96 165 235;             /* #60a5eb                                  */
+  --info-soft: 18 30 44;          /* #121e2c                                  */
+  --info-fg: 142 192 245;         /* #8ec0f5                                  */
+
+  /* ── Tint base ────────────────────────────────────────────────────────── */
+  /* White in dark, so a low-opacity layer reads as a subtle lift. */
+  --tint-base: 255 255 255;
+
+  /* ── Shadows ──────────────────────────────────────────────────────────── */
+  /* In dark, shadows are near-invisible — contrast does the lifting. */
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.30);
+  --shadow-card: 0 1px 3px rgb(0 0 0 / 0.36),
+                 0 4px 12px rgb(0 0 0 / 0.30);
+  --shadow-elevated: 0 8px 28px rgb(0 0 0 / 0.50),
+                     0 2px 8px rgb(0 0 0 / 0.40);
+  --shadow-glow: 0 0 0 1px rgb(109 119 248 / 0.30),
+                 0 8px 32px rgb(77 87 232 / 0.28);
+
+  color-scheme: dark;
+}
+
+/* ============================================================================
+   BASE
+   ============================================================================ */
+
+html,
+body,
+#root {
+  height: 100%;
+  /* `overflow: hidden` em ambos os eixos.
+   *
+   * Horizontal: defesa-em-camadas contra qualquer elemento que tente
+   * criar scroll-X (KaTeX wide, grid overflow, etc.) — o app inteiro
+   * já tem `overflow-x-hidden` no `<main>`, mas se algo escapar (Portal,
+   * fixed, etc.) o body também não rola.
+   *
+   * Vertical: o único container que deve rolar verticalmente é o
+   * `<main>` do Layout. Bloqueando o eixo Y no body/html, eliminamos
+   * "scrollbars fantasma" que apareciam em casos onde algum elemento
+   * com `position: absolute` ou um `transform` momentâneo durante mount
+   * inflava o scrollHeight do `<body>`. O `<main>` continua rolando
+   * normalmente — ele é filho do `<div h-screen overflow-hidden>` do
+   * Layout, não está limitado por essa regra. */
+  overflow: hidden;
+}
+
+body {
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  background-color: rgb(var(--bg-app));
+  color: rgb(var(--text-primary));
+}
+
+/* A very faint accent wash in the corners. Uses the accent at a tiny
+   opacity so it works on both light and dark floors without looking dirty. */
+#root {
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgb(var(--accent) / 0.05) 0%,
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 100% 100%,
+      rgb(var(--accent) / 0.04) 0%,
+      transparent 42%
+    );
+}
+
+::selection {
+  background: rgb(var(--accent) / 0.25);
+  color: rgb(var(--text-primary));
+}
+
+/* Scrollbar — tints itself per theme via --tint-base. */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--tint-base) / 0.14);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--tint-base) / 0.26);
+  background-clip: padding-box;
+}
+
+/* Focus-visible ring — consistent across the app, accent-colored. */
+:focus-visible {
+  outline: 2px solid rgb(var(--accent) / 0.55);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   UTILITIES
+   ----------------------------------------------------------------------------
+   `tint-*` : translucent overlays whose BASE color flips per theme. Use for
+   subtle hover layers and faint chip fills where a solid token would be too
+   heavy. Because the base flips, `.tint-2` is a light veil in dark mode and
+   a dark veil in light mode — both read as "slightly recessed/!=surface".
+   ============================================================================ */
+@layer utilities {
+  .tint-1 { background-color: rgb(var(--tint-base) / 0.035); }
+  .tint-2 { background-color: rgb(var(--tint-base) / 0.06); }
+  .tint-3 { background-color: rgb(var(--tint-base) / 0.10); }
+  .hover\:tint-1:hover { background-color: rgb(var(--tint-base) / 0.035); }
+  .hover\:tint-2:hover { background-color: rgb(var(--tint-base) / 0.06); }
+  .hover\:tint-3:hover { background-color: rgb(var(--tint-base) / 0.10); }
+
+  /* `on-accent-tint-*` : ALWAYS a white veil regardless of theme. Use for
+     highlights sitting ON TOP of a solid accent / rank gradient surface,
+     where the backdrop is colored, not theme-neutral. */
+  .on-accent-tint-1 { background-color: rgb(255 255 255 / 0.12); }
+  .on-accent-tint-2 { background-color: rgb(255 255 255 / 0.20); }
+
+  /* Subtle dotted grid background. */
+  .bg-grid { background-image: theme('backgroundImage.grid-faint'); }
+}
+
+/* ============================================================================
+   KATEX
+   ============================================================================ */
+.katex {
+  color: inherit !important; /* inherit text color so it themes automatically */
+  font-size: 1.05em;
+}
+.katex-display {
+  margin: 0.75rem 0 !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+/* Review font scaling — set by InteractiveCardBody via a wrapper class. */
+.review-scaled { font-size: var(--review-text, 1.125rem); line-height: 1.65; }
+.review-scaled .katex { font-size: var(--review-katex, 1.1em) !important; }
+.review-scale-sm { --review-text: 1rem;     --review-katex: 1.0em;  }
+.review-scale-md { --review-text: 1.125rem; --review-katex: 1.1em;  }
+.review-scale-lg { --review-text: 1.25rem;  --review-katex: 1.25em; }
+.review-scale-xl { --review-text: 1.5rem;   --review-katex: 1.45em; }
+
+/* ============================================================================
+   MARKDOWN (.prose-quanta)
+   ----------------------------------------------------------------------------
+   All colors are tokens, so card content themes automatically. Code blocks
+   get their own treatment — a recessed tinted panel — which is the one place
+   a "darker-than-surface" patch is intentional and acceptable in both themes.
+   ============================================================================ */
+.prose-quanta { line-height: 1.7; color: rgb(var(--text-secondary)); }
+.prose-quanta p { margin: 0.5rem 0; }
+.prose-quanta strong { color: rgb(var(--text-primary)); font-weight: 600; }
+.prose-quanta h1,
+.prose-quanta h2,
+.prose-quanta h3 {
+  font-weight: 600;
+  margin: 0.75rem 0 0.4rem;
+  color: rgb(var(--text-primary));
+}
+.prose-quanta h1 { font-size: 1.4rem; }
+.prose-quanta h2 { font-size: 1.2rem; }
+.prose-quanta h3 { font-size: 1.05rem; }
+.prose-quanta ul { list-style: disc;    padding-left: 1.4rem; margin: 0.5rem 0; }
+.prose-quanta ol { list-style: decimal; padding-left: 1.4rem; margin: 0.5rem 0; }
+.prose-quanta code {
+  background: rgb(var(--tint-base) / 0.07);
+  padding: 0.1rem 0.35rem;
+  border-radius: 0.25rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.92em;
+  color: rgb(var(--text-primary));
+}
+.prose-quanta pre {
+  background: rgb(var(--tint-base) / 0.05);
+  border: 1px solid rgb(var(--border-subtle));
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+.prose-quanta pre code { background: transparent; padding: 0; }
+.prose-quanta a {
+  color: rgb(var(--accent-fg));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.prose-quanta blockquote {
+  border-left: 2px solid rgb(var(--accent) / 0.5);
+  padding-left: 0.75rem;
+  color: rgb(var(--text-muted));
+  margin: 0.6rem 0;
+}
+.prose-quanta hr { border-color: rgb(var(--border-subtle)); margin: 1rem 0; }
+.prose-quanta table {
+  border-collapse: collapse;
+  margin: 0.6rem 0;
+  width: 100%;
+}
+.prose-quanta th,
+.prose-quanta td {
+  border: 1px solid rgb(var(--border-subtle));
+  padding: 0.35rem 0.6rem;
+  text-align: left;
+}
+.prose-quanta th {
+  background: rgb(var(--tint-base) / 0.04);
+  color: rgb(var(--text-primary));
+  font-weight: 600;
+}
+
+/* ============================================================================
+   CARD FLIP 3D
+   ============================================================================ */
+.flip-card { perspective: 1400px; }
+.flip-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.flip-front,
+.flip-back {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back { transform: rotateY(180deg); }
+.flipped .flip-inner { transform: rotateY(180deg); }

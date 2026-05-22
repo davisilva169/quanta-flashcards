@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quanta — Flashcards técnicos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      /*
+       * Anti-flash theme bootstrap.
+       * --------------------------------------------------------------------
+       * Runs BEFORE React (and before the CSS paints) so the very first
+       * frame is already in the right theme — no flash of the wrong one.
+       *
+       * Source of truth at runtime is `localStorage['quanta:theme']`, which
+       * the app keeps in sync with the DB on every theme change. Values:
+       * 'light' | 'dark' | 'system'. Missing → 'system' (sensible default
+       * for a first launch; the app will then persist whatever resolves).
+       *
+       * The ONLY thing this script does is add or remove the `dark` class
+       * on <html>. Light is the default (no class). App.tsx re-applies the
+       * authoritative value once the DB is read — if they agree it's a
+       * no-op, if not it self-corrects with no visible flash.
+       */
+      (function () {
+        try {
+          var pref = localStorage.getItem('quanta:theme') || 'system';
+          var isDark;
+          if (pref === 'dark') {
+            isDark = true;
+          } else if (pref === 'light') {
+            isDark = false;
+          } else {
+            isDark =
+              !!window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches;
+          }
+          document.documentElement.classList.toggle('dark', isDark);
+        } catch (e) {
+          /* localStorage blocked — leave as light; App.tsx will fix it. */
+        }
+      })();
+    </script>
+  </head>
+  <body class="bg-app text-primary antialiased">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

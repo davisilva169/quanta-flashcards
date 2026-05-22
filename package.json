@@ -1,0 +1,106 @@
+{
+  "name": "quanta",
+  "private": true,
+  "version": "0.5.1",
+  "description": "Flashcards técnicos com LaTeX, revisão espaçada e progresso real.",
+  "author": "Davi dos Santos Silva (@davisilva169)",
+  "license": "MIT",
+  "homepage": "https://github.com/davisilva169/quanta-flashcards",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/davisilva169/quanta-flashcards.git"
+  },
+  "bugs": {
+    "url": "https://github.com/davisilva169/quanta-flashcards/issues"
+  },
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run build:vite",
+    "build:vite": "tsc -b && vite build",
+    "preview": "vite preview",
+    "dist": "npm run build:vite && electron-builder",
+    "dist:win": "npm run build:vite && electron-builder --win nsis portable",
+    "dist:linux": "npm run build:vite && electron-builder --linux AppImage deb",
+    "dist:mac": "npm run build:vite && electron-builder --mac dmg"
+  },
+  "dependencies": {
+    "dexie": "4.0.10",
+    "framer-motion": "11.5.6",
+    "katex": "0.16.11",
+    "lucide-react": "0.441.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-markdown": "9.0.1",
+    "rehype-katex": "7.0.1",
+    "remark-gfm": "4.0.0",
+    "remark-math": "6.0.0"
+  },
+  "devDependencies": {
+    "@types/katex": "0.16.7",
+    "@types/react": "18.3.5",
+    "@types/react-dom": "18.3.0",
+    "@vitejs/plugin-react": "4.7.0",
+    "autoprefixer": "10.4.20",
+    "electron": "32.0.2",
+    "electron-builder": "25.0.5",
+    "postcss": "8.4.45",
+    "tailwindcss": "3.4.10",
+    "typescript": "5.5.4",
+    "vite": "7.3.2",
+    "vite-plugin-electron": "0.28.8",
+    "vite-plugin-electron-renderer": "0.14.6"
+  },
+  "build": {
+    "appId": "com.quanta.app",
+    "productName": "Quanta",
+    "copyright": "Copyright © 2026 Davi dos Santos Silva",
+    "asar": true,
+    "files": [
+      "dist/**/*",
+      "dist-electron/**/*"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": false,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Quanta",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false,
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico",
+      "uninstallDisplayName": "Quanta ${version}"
+    },
+    "portable": {
+      "artifactName": "${productName}-${version}-portable.${ext}"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ],
+      "category": "Education",
+      "icon": "build/icon.png"
+    },
+    "mac": {
+      "target": "dmg",
+      "category": "public.app-category.education",
+      "icon": "build/icon.png"
+    }
+  }
+}
