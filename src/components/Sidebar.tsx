@@ -93,7 +93,7 @@ export function Sidebar({ current, onNavigate }: Props) {
             Quanta
           </div>
           <div className="text-[10px] uppercase tracking-widest text-faint">
-            v0.2
+            v0.5.1
           </div>
         </div>
       </div>
@@ -119,7 +119,7 @@ export function Sidebar({ current, onNavigate }: Props) {
               {isActive && (
                 <motion.div
                   layoutId="sidebar-active"
-                  className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 rounded-full bg-accent"
+                  className="absolute left-0 inset-y-1.5 w-[3px] rounded-full bg-accent"
                   transition={{ type: 'spring', stiffness: 400, damping: 30 }}
                 />
               )}

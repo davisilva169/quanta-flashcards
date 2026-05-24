@@ -2,15 +2,15 @@ import { app, BrowserWindow, shell } from 'electron';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 // __dirname não existe nativamente em ESM; recriamos
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = path.dirname(__filename);
 // Vite injeta variáveis em desenvolvimento
 process.env.DIST = path.join(__dirname, '../dist');
 process.env.VITE_PUBLIC = app.isPackaged
     ? process.env.DIST
     : path.join(process.env.DIST, '../public');
-let mainWindow = null;
-const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
+var mainWindow = null;
+var VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
 // ── Fix the userData path independent of productName ────────────────────────
 //
 // By default, Electron derives the userData directory from `productName`
@@ -29,7 +29,7 @@ const VITE_DEV_SERVER_URL = process.env.VITE_DEV_SERVER_URL;
 // `app.whenReady()` — qualquer subsystem que leia `userData` (incluindo a
 // abertura de IndexedDB que o renderer fará) precisa enxergar o caminho
 // final, e Electron resolve isso na inicialização do processo.
-app.setPath('userData', path.join(app.getPath('appData'), 'Quanta'));
+app.setPath('userData', path.join(app.getPath('appData'), 'Quanta Public'));
 function createWindow() {
     mainWindow = new BrowserWindow({
         width: 1280,
@@ -50,7 +50,8 @@ function createWindow() {
         },
     });
     // Abre links externos no navegador padrão, não dentro do app
-    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    mainWindow.webContents.setWindowOpenHandler(function (_a) {
+        var url = _a.url;
         if (url.startsWith('http'))
             shell.openExternal(url);
         return { action: 'deny' };
@@ -65,13 +66,13 @@ function createWindow() {
     }
 }
 app.whenReady().then(createWindow);
-app.on('window-all-closed', () => {
+app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
         app.quit();
         mainWindow = null;
     }
 });
-app.on('activate', () => {
+app.on('activate', function () {
     if (BrowserWindow.getAllWindows().length === 0) {
         createWindow();
     }
